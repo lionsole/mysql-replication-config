@@ -2,7 +2,7 @@ datadir="/var/lib/proxysql"
 
 admin_variables=
 {
-        admin_credentials="admin:admin;monitor:pass"
+        admin_credentials="admin:admin;monitor:monitor"
         mysql_ifaces="0.0.0.0:6032"
         refresh_interval=2000
 }
@@ -14,8 +14,8 @@ mysql_variables=
         poll_timeout=2000
         interfaces="0.0.0.0:6033"
         server_version="5.7.22"
-        monitor_username="proxysql"
-        monitor_password="proxysqlpassword"
+        monitor_username="monitor"
+        monitor_password="monitor"
 }
 
 mysql_replication_hostgroups =
@@ -25,14 +25,13 @@ mysql_replication_hostgroups =
 
 mysql_servers =
 (
-        { address="0.0.0.0" , port=3306 , hostgroup=10, max_connections=200 , max_replication_lag = 5 },
-        { address="0.0.0.0" , port=3307 , hostgroup=20, max_connections=200 , max_replication_lag = 5 }
+        { address="172.17.0.2" , port=3306 , hostgroup=10, max_connections=200 , max_replication_lag = 5 },
+        { address="172.17.0.3" , port=3306 , hostgroup=20, max_connections=200 , max_replication_lag = 5 }
 )
 
 mysql_users =
 (
-        { username = "root" , password = "123456" , default_hostgroup = 10 , active = 1 },
-        { username = "root" , password = "123456" , default_hostgroup = 20 , active = 1 }
+        { username = "root" , password = "123456" , active = 1 }
 )
 
 mysql_query_rules =

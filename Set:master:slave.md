@@ -31,6 +31,7 @@ show slave status \G;
 show slave status;
 start slave;
 
+### 解释
 master_host: Master 的IP地址
 master_user: 在 Master 中授权的用于数据同步的用户
 master_password: 同步数据的用户的密码
