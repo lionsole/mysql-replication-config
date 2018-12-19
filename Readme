@@ -1,0 +1,7 @@
+# Mysql replication settings
+
+## Feature
+1. master slave setup
+2. read write split
+3. docker deploy
+4. shell script auto 
