@@ -1,5 +1,6 @@
 ## Proxysql 设置
 
+### 启动
 docker run --name proxysql \
 --rm \
 -p 6033:6033 -p 6032:6032 \
@@ -27,4 +28,28 @@ SAVE MYSQL VARIABLES TO DISK;
 select * from mysql_servers;
 select * from mysql_users;
 select * from stats_mysql_connection_pool;
+select hostgroup,srv_host,srv_port,status,Queries from stats_mysql_connection_pool;
+
 SELECT * FROM monitor.mysql_server_ping_log ORDER BY time_start_us DESC LIMIT 10;
+SELECT digest,SUBSTR(digest_text,0,25),count_star,sum_time FROM stats_mysql_query_digest WHERE digest_text LIKE 'SELECT%' ORDER BY count_star DESC LIMIT 5;
+
+#### 规则击中率
+select * from stats_mysql_query_rules;
+
+#### To check how what statements application has executed :
+select Command,Total_Time_us,Total_cnt from stats_mysql_commands_counters where Total_Time_us> 0 ;
+
+SELECT hostgroup, username, digest_text, count_star, sum_time FROM stats_mysql_query_digest;
+
+
+#### Test DML Queries
+INSERT INTO mysql_query_rules(rule_id,active,username,schemaname,match_digest,mirror_hostgroup,apply) VALUES (12,1,"sysbench","sbtest","^(INSERT|UPDATE|DELETE)",7,1);
+
+#### workbench
+sysbench --test=oltp --oltp-table-size=10000 --mysql-db=sbtest --mysql-user=sysbench --db-driver=mysql --mysql-password=sysbench --mysql-host=127.0.0.1 --max-time=1 --oltp-read-only=off --max-requests=0 --mysql-port=6033 --num-threads=1 --db-ps-mode=disable run
+
+
+## 参考
+[proxysql debug](https://mydbops.wordpress.com/2018/04/13/proxysql-series-mirroring-mysql-queries/)
+[proxysql config](https://github.com/sysown/proxysql/wiki/ProxySQL-Configuration)
+
