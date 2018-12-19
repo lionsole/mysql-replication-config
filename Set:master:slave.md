@@ -63,6 +63,36 @@ mysql < fulldb.dump
 3. change master ...
 4. start slave
 
+## Proxysql 设置
+
+docker run --name proxysql \
+--rm \
+-p 6033:6033 -p 6032:6032 \
+-d severalnines/proxysql
+
+mysql -u admin -padmin -h 127.0.0.1 -P6032 --prompt='Admin> '
+
+insert into mysql_servers(hostgroup_id,hostname,port,weight,comment) values(1,'172.17.0.2',3306,1,'Write Group');
+insert into mysql_servers(hostgroup_id,hostname,port,weight,comment) values(2,'172.17.0.3',3307,1,'Read Group');
+
+UPDATE global_variables SET variable_value='monitor' WHERE variable_name='mysql-monitor_username';
+UPDATE global_variables SET variable_value='monitor' WHERE variable_name='mysql-monitor_password';
+
+insert into mysql_users(username,password,default_hostgroup,transaction_persistent) values('monitor','monitor',2,1);
+
+### 相应数据库设置
+GRANT SELECT ON *.* TO 'monitor'@'%' IDENTIFIED BY 'monitor';
+
+LOAD MYSQL VARIABLES TO RUNTIME;
+SAVE MYSQL VARIABLES TO DISK;
+
+### Proxy check
+select * from mysql_servers;
+select * from stats_mysql_connection_pool;
+SELECT * FROM monitor.mysql_server_ping_log ORDER BY time_start_us DESC LIMIT 10;
+
+
+
 ## 数据库操作集合
 SET @@GLOBAL.read_only = ON;
 SHOW BINARY LOGS;
@@ -90,4 +120,5 @@ mysql --host=host_name -u root -p < dump_file
 2. [简书](https://www.jianshu.com/p/ab20e835a73f)
 3. [同步日志参考](https://dev.mysql.com/doc/refman/5.7/en/mysqlbinlog-backup.html)
 4. [数据备份同步](https://dev.mysql.com/doc/refman/5.7/en/replication-snapshot-method.html)
-
+5. [Proxysetting](https://github.com/sysown/proxysql/wiki/Configuring-ProxySQL)
+6. [proxysql/wiki](https://github.com/sysown/proxysql/wiki)

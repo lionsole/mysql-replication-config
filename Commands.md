@@ -24,3 +24,22 @@ mysql -uadmin -padmin -h127.0.0.1 -P6032 --prompt='Admin> '
 
 mysql -uroot -p123456 -h127.0.0.1 -P6032 --prompt='Master> '
 
+
+
+insert into mysql_servers(hostgroup_id,hostname,port,weight,comment) values(1,'172.17.0.2',3306,1,'Write Group');
+insert into mysql_servers(hostgroup_id,hostname,port,weight,comment) values(2,'172.17.0.3',3307,1,'Read Group');
+
+UPDATE mysql_servers SET max_connections=10 WHERE hostname='172.16.0.2';
+UPDATE mysql_servers SET weight=1 WHERE hostname='172.16.0.1' AND hostgroup_id=1;
+UPDATE mysql_servers SET status='OFFLINE_SOFT' WHERE hostname='172.16.0.2';
+DELETE FROM mysql_servers WHERE hostgroup_id=1 AND hostname IN ('172.16.0.1','172.16.0.2');
+
+### proxysql mysql 分别对应设置
+GRANT ALL ON *.* TO 'proxysql'@'%' IDENTIFIED BY '123456';
+GRANT SELECT ON *.* TO 'monitor'@'%' IDENTIFIED BY 'monitor';
+
+
+insert into mysql_users(username,password,default_hostgroup,transaction_persistent) values('root','123456',1,1);
+insert into mysql_users(username,password,default_hostgroup,transaction_persistent) values('monitor','monitor',2,1);
+
+
