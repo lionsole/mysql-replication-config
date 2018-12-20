@@ -52,4 +52,8 @@ sysbench --test=oltp --oltp-table-size=10000 --mysql-db=sbtest --mysql-user=sysb
 ## 参考
 [proxysql debug](https://mydbops.wordpress.com/2018/04/13/proxysql-series-mirroring-mysql-queries/)
 [proxysql config](https://github.com/sysown/proxysql/wiki/ProxySQL-Configuration)
-
+[proxysql config](http://seanlook.com/2017/04/10/mysql-proxysql-install-config/)
+[proxysql router](http://seanlook.com/2017/04/17/mysql-proxysql-route-rw_split/)
+[proxy operations](https://severalnines.com/blog/mysql-load-balancing-proxysql-overview)
+[proxysql performance](https://www.percona.com/blog/2017/04/10/proxysql-rules-do-i-have-too-many/#comment-10967989)
+[proxysql performance](http://seanlook.com/2017/04/20/mysql-proxysql-performance-test/)

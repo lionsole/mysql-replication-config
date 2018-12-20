@@ -95,3 +95,4 @@ mysql --host=host_name -u root -p < dump_file
 5. [Proxysetting](https://github.com/sysown/proxysql/wiki/Configuring-ProxySQL)
 6. [proxysql/wiki](https://github.com/sysown/proxysql/wiki)
 7. [proxysql/read:write setting](https://github.com/sysown/proxysql/wiki/ProxySQL-Read-Write-Split-(HOWTO))
+8. [MySQL Group Replication](https://mysqlhighavailability.com/setting-up-mysql-group-replication-with-mysql-docker-images/)
